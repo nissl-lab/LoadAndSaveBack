@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LoadAndSaveBack": {
+      "commandName": "Project",
+      "commandLineArgs": "SourceExcel.xlsx output.xlsx"
+    }
+  }
+}

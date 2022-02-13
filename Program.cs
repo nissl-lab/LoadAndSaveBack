@@ -36,7 +36,7 @@ namespace LoadAndSaveBack
                 rfs.Close();
                 using (FileStream fs = File.Create(target))
                 {
-                    workbook.Write(fs);
+                    workbook.Write(fs, false);
                 }
             }
             else
