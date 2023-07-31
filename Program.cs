@@ -31,22 +31,28 @@ namespace LoadAndSaveBack
 
             if (mode == RunMode.Excel)
             {
-                Stream rfs = File.OpenRead(src);
-                IWorkbook workbook = new XSSFWorkbook(rfs);
-                rfs.Close();
-                using (FileStream fs = File.Create(target))
+                using (Stream rfs = File.OpenRead(src))
                 {
-                    workbook.Write(fs, false);
+                    using (IWorkbook workbook = new XSSFWorkbook(rfs))
+                    {
+                        using (FileStream fs = File.Create(target))
+                        {
+                            workbook.Write(fs, false);
+                        }
+                    }
                 }
             }
             else
             {
-                Stream rfs = File.OpenRead(src);
-                XWPFDocument workbook = new XWPFDocument(rfs);
-                rfs.Close();
-                using (FileStream fs = File.Create(target))
+                using(Stream rfs = File.OpenRead(src))
                 {
-                    workbook.Write(fs);
+                    using (XWPFDocument workbook = new XWPFDocument(rfs))
+                    {
+                        using (FileStream fs = File.Create(target))
+                        {
+                            workbook.Write(fs);
+                        }
+                    }
                 }
             }
         }
