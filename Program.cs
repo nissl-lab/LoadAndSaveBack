@@ -36,21 +36,20 @@ namespace LoadAndSaveBack
             {
                 using (Stream rfs = File.OpenRead(src))
                 {
-                    IWorkbook workbook = new XSSFWorkbook(rfs);
-                    using (FileStream fs = File.Create(target))
+                    using (IWorkbook workbook = new XSSFWorkbook(rfs))
                     {
-                        workbook.Write(fs, false);
+                        using (FileStream fs = File.Create(target))
+                        {
+                            workbook.Write(fs, false);
+                        }
                     }
                 }
             }
             else if (mode== RunMode.Excel2003)
             {
-                Stream rfs = File.OpenRead(src);
-                IWorkbook workbook = new HSSFWorkbook(rfs);
-                rfs.Close();
-                using (FileStream fs = File.Create(target))
+                using (Stream rfs = File.OpenRead(src))
                 {
-                    using (IWorkbook workbook = new XSSFWorkbook(rfs))
+                    using (IWorkbook workbook = new HSSFWorkbook(rfs))
                     {
                         using (FileStream fs = File.Create(target))
                         {
@@ -61,7 +60,7 @@ namespace LoadAndSaveBack
             }
             else
             {
-                using(Stream rfs = File.OpenRead(src))
+                using (Stream rfs = File.OpenRead(src))
                 {
                     using (XWPFDocument workbook = new XWPFDocument(rfs))
                     {
