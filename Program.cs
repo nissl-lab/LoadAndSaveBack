@@ -1,4 +1,5 @@
-﻿using NPOI.SS.UserModel;
+﻿using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using NPOI.XWPF.UserModel;
 using System;
@@ -13,7 +14,8 @@ namespace LoadAndSaveBack
     {
         enum RunMode
         { 
-            Excel,
+            Excel2003,
+            Excel2007,
             Word
         }
         static void Main(string[] args)
@@ -23,16 +25,28 @@ namespace LoadAndSaveBack
 
             string src = args[0];
             string target = args[1];
-            
 
-            RunMode mode= RunMode.Excel;
-            if (src.Contains(".docx"))
+            RunMode mode= RunMode.Excel2007;
+            if (src.EndsWith(".docx"))
                 mode = RunMode.Word;
+            else if(src.EndsWith(".xls"))
+                mode = RunMode.Excel2003;
 
-            if (mode == RunMode.Excel)
+            if (mode == RunMode.Excel2007)
+            {
+                using (Stream rfs = File.OpenRead(src))
+                {
+                    IWorkbook workbook = new XSSFWorkbook(rfs);
+                    using (FileStream fs = File.Create(target))
+                    {
+                        workbook.Write(fs, false);
+                    }
+                }
+            }
+            else if (mode== RunMode.Excel2003)
             {
                 Stream rfs = File.OpenRead(src);
-                IWorkbook workbook = new XSSFWorkbook(rfs);
+                IWorkbook workbook = new HSSFWorkbook(rfs);
                 rfs.Close();
                 using (FileStream fs = File.Create(target))
                 {
